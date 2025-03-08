@@ -1,0 +1,53 @@
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+const resizeCanvas = () => {
+    canvas.width = window.innerWidth * 0.8;
+    canvas.height = window.innerHeight * 0.8;
+    player.x = canvas.width / 2 - player.width / 2;
+    player.y = canvas.height - player.height - 20;
+    player.width = canvas.width * 0.08;
+    player.height = player.width;
+    player.speed = canvas.width * 0.01;
+};
+
+const player = {
+    width: canvas.width * 0.08,
+    height: canvas.width * 0.08,
+    x: 0,
+    y: 0,
+    speed: canvas.width * 0.01,
+    dx: 0
+};
+
+const playerImg = new Image();
+playerImg.src = "res/img/raketa.png";
+
+const drawPlayer = () => ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
+
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft" || event.key === "a") player.dx = -player.speed;
+    else if (event.key === "ArrowRight" || event.key === "d") player.dx = player.speed;
+});
+
+document.addEventListener("keyup", (event) => {
+    if (["ArrowLeft", "ArrowRight", "a", "d"].includes(event.key)) player.dx = 0;
+});
+
+const update = () => {
+    player.x += player.dx;
+    if (player.x < 0) player.x = 0;
+    if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+};
+
+const gameLoop = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawPlayer();
+    update();
+    requestAnimationFrame(gameLoop);
+};
+
+gameLoop();
