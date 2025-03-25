@@ -1,4 +1,5 @@
 import "./bullets.js";
+import { updateBullets, drawBullets } from "./bullets.js";
 
 export { player };
 export const canvas = document.getElementById("gameCanvas");
@@ -51,6 +52,8 @@ const gameLoop = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawPlayer();
     update();
+    updateBullets();
+    drawBullets();
     requestAnimationFrame(gameLoop);
 };
 
