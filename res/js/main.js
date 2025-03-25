@@ -1,25 +1,29 @@
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+import "./bullets.js";
+
+export { player };
+export const canvas = document.getElementById("gameCanvas");
+export const ctx = canvas.getContext("2d"); 
 
 const resizeCanvas = () => {
     canvas.width = window.innerWidth * 0.8;
     canvas.height = window.innerHeight * 0.8;
-    player.x = canvas.width / 2 - player.width / 2;
-    player.y = canvas.height - player.height - 20;
+    
     player.width = canvas.width * 0.08;
     player.height = player.width;
     player.speed = canvas.width * 0.01;
+
+    player.x = canvas.width / 2 - player.width / 2;
+    player.y = canvas.height - player.height - 20;
 };
 
 const player = {
-    width: canvas.width * 0.08,
-    height: canvas.width * 0.08,
+    width: 0,
+    height: 0,
     x: 0,
     y: 0,
-    speed: canvas.width * 0.01,
+    speed: 0,
     dx: 0
 };
-
 const playerImg = new Image();
 playerImg.src = "res/img/raketa.png";
 
