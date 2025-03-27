@@ -1,15 +1,19 @@
 import "./bullets.js";
+import "./enemies.js";
 import { updateBullets, drawBullets } from "./bullets.js";
+import { drawEnemies, createEnemies, enemies } from "./enemies.js";
 
-export { player };
 export const canvas = document.getElementById("gameCanvas");
 export const ctx = canvas.getContext("2d"); 
+export { player };
+
+createEnemies(3, 5, 20, 20, 40, 30, 2);
 
 const resizeCanvas = () => {
     canvas.width = window.innerWidth * 0.8;
     canvas.height = window.innerHeight * 0.8;
     
-    player.width = canvas.width * 0.08;
+    player.width = canvas.width * 0.05;
     player.height = player.width;
     player.speed = canvas.width * 0.01;
 
@@ -48,12 +52,13 @@ const update = () => {
     if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
 };
 
-const gameLoop = () => {
+let gameLoop = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawPlayer();
     update();
     updateBullets();
     drawBullets();
+    drawEnemies();
     requestAnimationFrame(gameLoop);
 };
 
