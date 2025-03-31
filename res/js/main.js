@@ -1,7 +1,7 @@
 import "./bullets.js";
 import "./enemies.js";
 import { updateBullets, drawBullets } from "./bullets.js";
-import { drawEnemies, createEnemies, enemies } from "./enemies.js";
+import { drawEnemies, createEnemies, enemies, updateEnemies } from "./enemies.js";
 
 export const canvas = document.getElementById("gameCanvas");
 export const ctx = canvas.getContext("2d"); 
@@ -58,6 +58,7 @@ let gameLoop = () => {
     update();
     updateBullets();
     drawBullets();
+    updateEnemies();
     drawEnemies();
     requestAnimationFrame(gameLoop);
 };

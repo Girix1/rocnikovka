@@ -1,7 +1,7 @@
 import { player } from "./main.js";
 import { canvas, ctx } from "./main.js";
 
-const bullets = [];
+export const bullets = [];
 const cannons = [
     { offsetX: 0.2 },
     { offsetX: 0.8 } 
