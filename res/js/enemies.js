@@ -49,28 +49,27 @@ export const updateEnemies = () => {
       enemy.y += 20;
     });
   }
-};
 
-for (let i = enemies.length - 1; i >= 0; i--) {
-  let enemy = enemies[i];
+  for (let i = enemies.length - 1; i >= 0; i--) {
+    let enemy = enemies[i];
 
-  for (let j = bullets.length - 1; j >= 0; j--) {
-    let bullet = bullets[j];
+    for (let j = bullets.length - 1; j >= 0; j--) {
+      let bullet = bullets[j];
 
-    if (
-      bullet.x < enemy.x + enemy.width &&
-      bullet.x + bullet.width > enemy.x &&
-      bullet.y < enemy.y + enemy.height &&
-      bullet.y + bullet.height > enemy.y
-    ) {
-// to splice proste pracuje s polem a meni nebo maze jeho obsah (hodne funny)
-      bullets.splice(j, 1);
-      enemies.splice(i, 1);
-      break;
+      if (
+        bullet.x < enemy.x + enemy.width &&
+        bullet.x + bullet.width > enemy.x &&
+        bullet.y < enemy.y + enemy.height &&
+        bullet.y + bullet.height > enemy.y
+      ) {
+        // to splice proste pracuje s polem a meni nebo maze jeho obsah (hodne funny)
+        bullets.splice(j, 1);
+        enemies.splice(i, 1);
+        break;
+      }
     }
   }
-}
-
+};
 export const drawEnemies = () => {
   ctx.fillStyle = "red";
   enemies.forEach((enemy) => {
