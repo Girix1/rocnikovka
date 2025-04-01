@@ -1,7 +1,8 @@
 import "./bullets.js";
 import "./enemies.js";
 import { updateBullets, drawBullets } from "./bullets.js";
-import { drawEnemies, createEnemies, enemies, updateEnemies } from "./enemies.js";
+import { drawEnemies, createEnemies, updateEnemies } from "./enemies.js";
+import { updateEnemyBullets, drawEnemyBullets} from "./enemyBullets.js";
 
 export const canvas = document.getElementById("gameCanvas");
 export const ctx = canvas.getContext("2d"); 
@@ -52,6 +53,14 @@ const update = () => {
     if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
 };
 
+let playerLives = 3;
+export const handlePlayerHit = () => {
+    playerLives--;
+    console.log(`Zbývající životy: ${playerLives}`)
+    if (playerLives <= 0) console.log("Game Over!");
+    //dalsi shit kterej jsem ted linej delat
+};
+
 let gameLoop = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawPlayer();
@@ -60,6 +69,8 @@ let gameLoop = () => {
     drawBullets();
     updateEnemies();
     drawEnemies();
+    updateEnemyBullets();
+    drawEnemyBullets();
     requestAnimationFrame(gameLoop);
 };
 
