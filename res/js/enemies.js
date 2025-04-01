@@ -1,5 +1,6 @@
 import { canvas, ctx } from "./main.js";
 import { bullets } from "./bullets.js";
+import { setCanShoot } from "./bullets.js";
 
 export const enemies = [];
 
@@ -35,41 +36,36 @@ export const createEnemies = (
 export const updateEnemies = () => {
   let changeDirection = false;
 
-  enemies.forEach((enemy) => {
-    enemy.x += enemy.speedX * enemy.direction;
+  for (let i = enemies.length - 1; i >= 0; i--) {
+      enemies[i].x += enemies[i].speedX * enemies[i].direction;
 
-    if (enemy.x + enemy.width >= canvas.width || enemy.x <= 0) {
-      changeDirection = true;
-    }
-  });
+      if (enemies[i].x + enemies[i].width >= canvas.width || enemies[i].x <= 0) {
+          changeDirection = true;
+      }
+      for (let j = bullets.length - 1; j >= 0; j--) {
+          if (
+              bullets[j].x < enemies[i].x + enemies[i].width &&
+              bullets[j].x + bullets[j].width > enemies[i].x &&
+              bullets[j].y < enemies[i].y + enemies[i].height &&
+              bullets[j].y + bullets[j].height > enemies[i].y
+          ) {
+// to splice proste pracuje s polem a meni nebo maze jeho obsah (hodne funny)
+              enemies.splice(i, 1);
+              bullets.splice(j, 1);
+              setCanShoot(true);
+              break;
+          }
+      }
+  }
 
   if (changeDirection) {
-    enemies.forEach((enemy) => {
-      enemy.direction *= -1;
-      enemy.y += 20;
-    });
-  }
-
-  for (let i = enemies.length - 1; i >= 0; i--) {
-    let enemy = enemies[i];
-
-    for (let j = bullets.length - 1; j >= 0; j--) {
-      let bullet = bullets[j];
-
-      if (
-        bullet.x < enemy.x + enemy.width &&
-        bullet.x + bullet.width > enemy.x &&
-        bullet.y < enemy.y + enemy.height &&
-        bullet.y + bullet.height > enemy.y
-      ) {
-        // to splice proste pracuje s polem a meni nebo maze jeho obsah (hodne funny)
-        bullets.splice(j, 1);
-        enemies.splice(i, 1);
-        break;
-      }
-    }
+      enemies.forEach(enemy => {
+          enemy.direction *= -1;
+          enemy.y += 20;
+      });
   }
 };
+
 export const drawEnemies = () => {
   ctx.fillStyle = "red";
   enemies.forEach((enemy) => {
