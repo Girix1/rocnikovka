@@ -1,19 +1,20 @@
 import { canvas, ctx, player, handlePlayerHit } from "./main.js";
-import { enemies } from "./enemies.js";
+import { enemies, waveLevel } from "./enemies.js";
 
 export const enemyBullets = [];
 
 const shootChance = 0.005;
 
 export const updateEnemyBullets = () => {
+    const currentShootChance = shootChance + waveLevel * 0.001;
     enemies.forEach(enemy => {
-        if (Math.random() < shootChance) {
+        if (Math.random() < currentShootChance) {
             enemyBullets.push({
                 x: enemy.x + enemy.width / 2 - 5,
                 y: enemy.y + enemy.height,
                 width: 10,
                 height: 20,
-                speed: 5
+                speed: 5 + waveLevel * 0.5
             });
         }
     });
