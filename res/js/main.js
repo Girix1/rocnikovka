@@ -10,6 +10,15 @@ export { player };
 
 createEnemies(3, 5, 20, 20, 40, 30, 2);
 
+export const gameState = {
+    score: 0,
+    playerLives: 3
+  };
+  
+  export const increaseScore = () => {
+    gameState.score++;
+  };
+
 const resizeCanvas = () => {
     canvas.width = window.innerWidth * 0.8;
     canvas.height = window.innerHeight * 0.8;
@@ -53,13 +62,19 @@ const update = () => {
     if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
 };
 
-let playerLives = 3;
 export const handlePlayerHit = () => {
-    playerLives--;
-    console.log(`Zbývající životy: ${playerLives}`)
-    if (playerLives <= 0) console.log("Game Over!");
+    gameState.playerLives--;
+    console.log(`Zbývající životy: ${gameState.playerLives}`)
+    if (gameState.playerLives <= 0) console.log("Game Over!");
     //dalsi shit kterej jsem ted linej delat
 };
+
+const drawScore = () => {
+    ctx.fillStyle = "white";
+    ctx.font = "24px 'Press Start 2P', monospace";
+    ctx.fillText(`Score: ${gameState.score}`, 20, 40);
+    ctx.fillText(`Lives: ${gameState.playerLives}`, 20, 70);
+}
 
 let gameLoop = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -71,6 +86,7 @@ let gameLoop = () => {
     drawEnemies();
     updateEnemyBullets();
     drawEnemyBullets();
+    drawScore();
     requestAnimationFrame(gameLoop);
 };
 

@@ -1,4 +1,4 @@
-import { canvas, ctx, player, handlePlayerHit } from "./main.js";
+import { canvas, ctx, player, handlePlayerHit, increaseScore } from "./main.js";
 import { enemies, waveLevel } from "./enemies.js";
 
 export const enemyBullets = [];

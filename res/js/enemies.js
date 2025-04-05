@@ -1,4 +1,4 @@
-import { canvas, ctx } from "./main.js";
+import { canvas, ctx, gameState, increaseScore} from "./main.js";
 import { bullets } from "./bullets.js";
 import { setCanShoot } from "./bullets.js";
 
@@ -54,6 +54,7 @@ export const updateEnemies = () => {
         enemies.splice(i, 1);
         bullets.splice(j, 1);
         setCanShoot(true);
+        increaseScore();
         break;
       }
     }
@@ -67,6 +68,7 @@ export const updateEnemies = () => {
   }
 
   if (enemies.length === 0) {
+    increaseScore();
     waveLevel++;
     const newSpeed = 2 + waveLevel * 0.5;
     createEnemies(3, 6, 20, 20, 40, 40, newSpeed);
