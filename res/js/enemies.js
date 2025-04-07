@@ -1,4 +1,4 @@
-import { canvas, ctx, gameState, increaseScore} from "./main.js";
+import { canvas, ctx, increaseScore} from "./main.js";
 import { bullets } from "./bullets.js";
 import { setCanShoot } from "./bullets.js";
 

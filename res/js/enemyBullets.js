@@ -1,9 +1,9 @@
-import { canvas, ctx, player, handlePlayerHit, increaseScore } from "./main.js";
+import { canvas, ctx, player, handlePlayerHit } from "./main.js";
 import { enemies, waveLevel } from "./enemies.js";
 
 export const enemyBullets = [];
 
-const shootChance = 0.005;
+const shootChance = 0.003;
 
 export const updateEnemyBullets = () => {
     const currentShootChance = shootChance + waveLevel * 0.001;
@@ -37,7 +37,7 @@ export const updateEnemyBullets = () => {
 };
 
 export const drawEnemyBullets = () => {
-    ctx.fillStyle = "yellow";
+    ctx.fillStyle = "white";
     enemyBullets.forEach(bullet => {
         ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
     });

@@ -10,3 +10,15 @@ body {
 canvas {
     border: 2px solid grey;
 }
+
+#gameOverScreen {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    padding: 30px;
+    border-radius: 10px;
+    font-family: 'Press Start 2P', monospace;
+}
+

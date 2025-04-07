@@ -31,6 +31,8 @@ const resizeCanvas = () => {
   player.y = canvas.height - player.height - 20;
 };
 
+//hrac
+
 const player = {
   width: 0,
   height: 0,
@@ -65,12 +67,21 @@ const update = () => {
     player.x = canvas.width - player.width;
 };
 
+//zivoty
+
 export const handlePlayerHit = () => {
   gameState.playerLives--;
   console.log(`Zbývající životy: ${gameState.playerLives}`);
-  if (gameState.playerLives <= 0) console.log("Game Over!");
-  //dalsi shit kterej jsem ted linej delat
+  if (gameState.playerLives <= 0) {
+    frozenFrame = new Image();
+    frozenFrame.src = canvas.toDataURL();
+    console.log("Game Over!"); 
+    showGameOver();
+    gameOver = true;
+    gameStarted = false;
+    }
 };
+//score 
 
 const drawScore = () => {
   ctx.fillStyle = "white";
@@ -83,9 +94,11 @@ const drawScore = () => {
   ctx.fillText(`Wave: ${waveLevel}`, canvas.width - 20, 30);
 };
 
+//startscreen 
 let gameStarted = false;
+let gameOver = false;
 
-const drawStartScreen = () => {
+const showStartScreen = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "white";
     ctx.font = "64px 'Press Start 2P', monospace";
@@ -99,7 +112,7 @@ const drawStartScreen = () => {
     const buttonX = canvas.width / 2 - buttonWidth / 2;
     const buttonY = canvas.height / 2;
 
-    ctx.fillStyle = "#ff6600";
+    ctx.fillStyle = "#ffa31a";
     ctx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
 
     ctx.fillStyle = "black";
@@ -128,24 +141,64 @@ canvas.addEventListener("click", (event) => {
     }
 });
 
-let gameLoop = () => {
-    if (!gameStarted) {
-        drawStartScreen(); 
-        requestAnimationFrame(gameLoop);
-        return;
-    }
+//game over screen
+const gameOverScreen = document.getElementById("gameOverScreen");
+const finalScore = document.getElementById("finalScore");
+const waveNumber = document.getElementById("waveNumber");
+const restartButton = document.getElementById("restartButton");
+const highScoresList = document.getElementById("highScoresList");
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawPlayer();
-  update();
-  updateBullets();
-  drawBullets();
-  updateEnemies();
-  drawEnemies();
-  updateEnemyBullets();
-  drawEnemyBullets();
-  drawScore();
-  requestAnimationFrame(gameLoop);
+restartButton.addEventListener("click", () => {
+    location.reload();
+});
+
+let gameOverDisplayed = false;
+const showGameOver = () => {
+    if (gameOverDisplayed) return;
+    gameOverDisplayed = true;
+    finalScore.textContent = `Score: ${gameState.score}`;
+    waveNumber.textContent = `Wave: ${waveLevel}`;
+    saveHighScore(gameState.score);
+    updateHighScoresList();
+    gameOverScreen.style.display = "block";
+};
+
+const saveHighScore = (score) => {
+    let scores = JSON.parse(localStorage.getItem("highScores")) || [];
+    scores.push(score);
+    scores.sort((a, b) => b - a);
+    scores = scores.slice(0, 5);
+    localStorage.setItem("highScores", JSON.stringify(scores));
+};
+
+const updateHighScoresList = () => {
+    const scores = JSON.parse(localStorage.getItem("highScores")) || [];
+    highScoresList.innerHTML = scores.map(s => `<li>${s}</li>`).join("");
+};
+
+//pokus o freeze gameoversccreen
+let frozenFrame = null;
+
+let gameLoop = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (gameStarted && !gameOver) {
+        drawPlayer();
+        update();
+        updateBullets();
+        drawBullets();
+        updateEnemies();
+        drawEnemies();
+        updateEnemyBullets();
+        drawEnemyBullets();
+        drawScore();
+    } else if (gameOver && frozenFrame) {
+        ctx.drawImage(frozenFrame, 0, 0, canvas.width, canvas.height);
+  return;
+    } else {
+        showStartScreen();
+    }
+    requestAnimationFrame(gameLoop);
 };
 
 gameLoop();
