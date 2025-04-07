@@ -54,7 +54,7 @@ export const updateEnemies = () => {
         enemies.splice(i, 1);
         bullets.splice(j, 1);
         setCanShoot(true);
-        increaseScore();
+        increaseScore(waveLevel);
         break;
       }
     }
