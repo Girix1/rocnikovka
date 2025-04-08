@@ -2,7 +2,7 @@ import { canvas, ctx, increaseScore, showGameOver} from "./main.js";
 import { bullets, setCanShoot } from "./bullets.js";
 
 export const enemies = [];
-export let waveLevel = 1;
+export let waveLevel = 0;
 
 const pixelArtEnemies = [
   "res/img/enemies/invader1.png",
