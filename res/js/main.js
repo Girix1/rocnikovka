@@ -8,7 +8,7 @@ export const canvas = document.getElementById("gameCanvas");
 export const ctx = canvas.getContext("2d");
 export { player };
 
-createEnemies(3, 5, 20, 20, 40, 30, 2);
+createEnemies();
 
 export const gameState = {
   score: 0,
@@ -72,14 +72,7 @@ const update = () => {
 export const handlePlayerHit = () => {
   gameState.playerLives--;
   console.log(`Zbývající životy: ${gameState.playerLives}`);
-  if (gameState.playerLives <= 0) {
-    frozenFrame = new Image();
-    frozenFrame.src = canvas.toDataURL();
-    console.log("Game Over!"); 
-    showGameOver();
-    gameOver = true;
-    gameStarted = false;
-    }
+  if (gameState.playerLives <= 0) showGameOver();
 };
 //score 
 
@@ -149,12 +142,19 @@ const restartButton = document.getElementById("restartButton");
 const highScoresList = document.getElementById("highScoresList");
 
 restartButton.addEventListener("click", () => {
-    location.reload();
+  location.reload();
 });
 
 let gameOverDisplayed = false;
-const showGameOver = () => {
+let frozenFrame = null;
+
+export const showGameOver = () => {
     if (gameOverDisplayed) return;
+    frozenFrame = new Image();
+    frozenFrame.src = canvas.toDataURL();
+    console.log("Game Over!");
+    gameOver = true;
+    gameStarted = false
     gameOverDisplayed = true;
     finalScore.textContent = `Score: ${gameState.score}`;
     waveNumber.textContent = `Wave: ${waveLevel}`;
@@ -175,9 +175,6 @@ const updateHighScoresList = () => {
     const scores = JSON.parse(localStorage.getItem("highScores")) || [];
     highScoresList.innerHTML = scores.map(s => `<li>${s}</li>`).join("");
 };
-
-//pokus o freeze gameoversccreen
-let frozenFrame = null;
 
 let gameLoop = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);

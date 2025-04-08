@@ -1,9 +1,24 @@
-import { canvas, ctx, increaseScore} from "./main.js";
-import { bullets } from "./bullets.js";
-import { setCanShoot } from "./bullets.js";
+import { canvas, ctx, increaseScore, showGameOver} from "./main.js";
+import { bullets, setCanShoot } from "./bullets.js";
 
 export const enemies = [];
 export let waveLevel = 1;
+
+const pixelArtEnemies = [
+  "res/img/enemies/invader1.png",
+  "res/img/enemies/invader2.png",
+  "res/img/enemies/invader3.png",
+  "res/img/enemies/invader4.png",
+  "res/img/enemies/invader5.png"
+];
+
+const realisticEnemies = [
+  "res/img/enemies/real1.png",
+  "res/img/enemies/real2.png",
+  "res/img/enemies/real3.png",
+  "res/img/enemies/real4.png",
+  "res/img/enemies/real5.png"
+];
 
 export const createEnemies = (
   rows,
@@ -22,13 +37,21 @@ export const createEnemies = (
 
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
+      const img = new Image();
+      if (waveLevel < 6) {
+        img.src = pixelArtEnemies[Math.floor(Math.random() * pixelArtEnemies.length)];
+      } else {
+        img.src = realisticEnemies[Math.floor(Math.random() * realisticEnemies.length)];
+      }
+
       enemies.push({
-        x: startX + col * (enemyWidth + spacingX),
-        y: startY + row * (enemyHeight + spacingY),
-        width: enemyWidth,
-        height: enemyHeight,
-        speedX: speed,
-        direction: 1,
+      x: startX + col * (enemyWidth + spacingX),
+      y: startY + row * (enemyHeight + spacingY),
+      width: enemyWidth,
+      height: enemyHeight,
+      speedX: speed,
+      direction: 1,
+      image: img
       });
     }
   }
@@ -67,17 +90,24 @@ export const updateEnemies = () => {
     });
   }
 
+  for (let i = 0; i < enemies.length; i++) {
+    if (enemies[i].y + enemies[i].height >= canvas.height - 100) {
+      console.log("Game Over: enemies landed!");
+      requestAnimationFrame(() => showGameOver());
+      return;
+    }
+  }
+
   if (enemies.length === 0) {
     increaseScore();
     waveLevel++;
     const newSpeed = 2 + waveLevel * 0.5;
-    createEnemies(3, 6, 20, 20, 40, 40, newSpeed);
+    createEnemies(3, 6, 20, 20, 60, 60, newSpeed);
   }
 };
 
 export const drawEnemies = () => {
-  ctx.fillStyle = "red";
   enemies.forEach((enemy) => {
-    ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+    if (enemy.image.complete) ctx.drawImage(enemy.image, enemy.x, enemy.y, enemy.width, enemy.height);
   });
 };
