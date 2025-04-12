@@ -5,7 +5,7 @@ export const enemyBullets = [];
 
 const shootChance = 0.003;
 
-export const updateEnemyBullets = () => {
+export const updateEnemyBullets = (deltaTime) => {
     const currentShootChance = shootChance + waveLevel * 0.001;
     enemies.forEach(enemy => {
         if (Math.random() < currentShootChance) {
@@ -20,8 +20,7 @@ export const updateEnemyBullets = () => {
     });
 
     for (let i = enemyBullets.length - 1; i >= 0; i--) {
-        enemyBullets[i].y += enemyBullets[i].speed;
-        
+        enemyBullets[i].y += enemyBullets[i].speed * deltaTime;
         if (
             enemyBullets[i].x < player.x + player.width &&
             enemyBullets[i].x + enemyBullets[i].width > player.x &&

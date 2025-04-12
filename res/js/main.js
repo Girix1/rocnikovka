@@ -60,8 +60,8 @@ document.addEventListener("keyup", (event) => {
   if (["ArrowLeft", "ArrowRight", "a", "d"].includes(event.key)) player.dx = 0;
 });
 
-const update = () => {
-  player.x += player.dx;
+const update = (deltaTime) => {
+  player.x += player.dx * deltaTime;
   if (player.x < 0) player.x = 0;
   if (player.x + player.width > canvas.width)
     player.x = canvas.width - player.width;
@@ -176,19 +176,25 @@ const updateHighScoresList = () => {
     highScoresList.innerHTML = scores.map(s => `<li>${s}</li>`).join("");
 };
 
-let gameLoop = () => {
+// universal speed hokus pokus diplodokus 🗣️ (uz to ztracim)
+let lastTime = performance.now();
+
+let gameLoop = (currentTime = performance.now()) => {
+  const deltaTime = (currentTime - lastTime) / 10;
+    lastTime = currentTime;
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (gameStarted && !gameOver) {
-        drawPlayer();
-        update();
-        updateBullets();
-        drawBullets();
-        updateEnemies();
-        drawEnemies();
-        updateEnemyBullets();
-        drawEnemyBullets();
-        drawScore();
+      drawPlayer();
+      update(deltaTime);
+      updateBullets(deltaTime);
+      drawBullets();
+      updateEnemies(deltaTime);
+      drawEnemies();
+      updateEnemyBullets(deltaTime);
+      drawEnemyBullets();
+      drawScore();
     } else if (gameOver && frozenFrame) {
         ctx.drawImage(frozenFrame, 0, 0, canvas.width, canvas.height);
   return;

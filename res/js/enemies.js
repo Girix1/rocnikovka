@@ -1,4 +1,4 @@
-import { canvas, ctx, increaseScore, showGameOver} from "./main.js";
+import { canvas, ctx, increaseScore, showGameOver } from "./main.js";
 import { bullets, setCanShoot } from "./bullets.js";
 
 export const enemies = [];
@@ -45,35 +45,42 @@ export const createEnemies = (
       }
 
       enemies.push({
-      x: startX + col * (enemyWidth + spacingX),
-      y: startY + row * (enemyHeight + spacingY),
-      width: enemyWidth,
-      height: enemyHeight,
-      speedX: speed,
-      direction: 1,
-      image: img
+        x: startX + col * (enemyWidth + spacingX),
+        y: startY + row * (enemyHeight + spacingY),
+        width: enemyWidth,
+        height: enemyHeight,
+        speedX: speed,
+        direction: 1,
+        image: img
       });
     }
   }
 };
 
-export const updateEnemies = () => {
+export const updateEnemies = (deltaTime) => {
   let changeDirection = false;
-
-  for (let i = enemies.length - 1; i >= 0; i--) {
-    enemies[i].x += enemies[i].speedX * enemies[i].direction;
-
-    if (enemies[i].x + enemies[i].width >= canvas.width || enemies[i].x <= 0) {
+  
+  for (let i = 0; i < enemies.length; i++) {
+    const nextX = enemies[i].x + enemies[i].speedX * enemies[i].direction * deltaTime;
+    if (nextX + enemies[i].width >= canvas.width || nextX <= 0) {
       changeDirection = true;
+      break;
     }
-    for (let j = bullets.length - 1; j >= 0; j--) {
+  }
+  for (let i = enemies.length - 1; i >= 0; i--) {
+    if (changeDirection) {
+      enemies[i].direction *= -1;
+      enemies[i].y += 20;
+    }
+    enemies[i].x += enemies[i].speedX * enemies[i].direction * deltaTime;
+
+      for (let j = bullets.length - 1; j >= 0; j--) {
       if (
         bullets[j].x < enemies[i].x + enemies[i].width &&
         bullets[j].x + bullets[j].width > enemies[i].x &&
         bullets[j].y < enemies[i].y + enemies[i].height &&
         bullets[j].y + bullets[j].height > enemies[i].y
       ) {
-        // to splice proste pracuje s polem a meni nebo maze jeho obsah (hodne funny)
         enemies.splice(i, 1);
         bullets.splice(j, 1);
         setCanShoot(true);
@@ -82,29 +89,21 @@ export const updateEnemies = () => {
       }
     }
   }
-
-  if (changeDirection) {
-    enemies.forEach((enemy) => {
-      enemy.direction *= -1;
-      enemy.y += 20;
-    });
-  }
-
-  for (let i = 0; i < enemies.length; i++) {
-    if (enemies[i].y + enemies[i].height >= canvas.height - 100) {
+  
+  for (let j = 0; j < enemies.length; j++) {
+    if (enemies[j].y + enemies[j].height >= canvas.height - 100) {
       console.log("Game Over: enemies landed!");
       requestAnimationFrame(() => showGameOver());
-      return;
     }
   }
-
+  
   if (enemies.length === 0) {
-    increaseScore();
+    increaseScore(waveLevel);
     waveLevel++;
     const newSpeed = 2 + waveLevel * 0.5;
     createEnemies(3, 6, 20, 20, 60, 60, newSpeed);
   }
-};
+}
 
 export const drawEnemies = () => {
   enemies.forEach((enemy) => {
