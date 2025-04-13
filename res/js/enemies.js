@@ -1,5 +1,6 @@
 import { canvas, ctx, increaseScore, showGameOver } from "./main.js";
 import { bullets, setCanShoot } from "./bullets.js";
+import { sfx } from "./sound.js";
 
 export const enemies = [];
 export let waveLevel = 0;
@@ -81,6 +82,7 @@ export const updateEnemies = (deltaTime) => {
         bullets[j].y < enemies[i].y + enemies[i].height &&
         bullets[j].y + bullets[j].height > enemies[i].y
       ) {
+        sfx.pop.play();
         enemies.splice(i, 1);
         bullets.splice(j, 1);
         setCanShoot(true);
@@ -99,6 +101,7 @@ export const updateEnemies = (deltaTime) => {
   
   if (enemies.length === 0) {
     increaseScore(waveLevel);
+    sfx.levelUp.play();
     waveLevel++;
     const newSpeed = 2 + waveLevel * 0.5;
     createEnemies(3, 6, 20, 20, 60, 60, newSpeed);

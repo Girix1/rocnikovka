@@ -3,7 +3,7 @@ import { enemies, waveLevel } from "./enemies.js";
 
 export const enemyBullets = [];
 
-const shootChance = 0.003;
+const shootChance = 0.001;
 
 export const updateEnemyBullets = (deltaTime) => {
     const currentShootChance = shootChance + waveLevel * 0.001;

@@ -3,6 +3,7 @@ import "./enemies.js";
 import { updateBullets, drawBullets } from "./bullets.js";
 import { drawEnemies, createEnemies, updateEnemies, waveLevel } from "./enemies.js";
 import { updateEnemyBullets, drawEnemyBullets } from "./enemyBullets.js";
+import { sfx } from "./sound.js";
 
 export const canvas = document.getElementById("gameCanvas");
 export const ctx = canvas.getContext("2d");
@@ -71,6 +72,7 @@ const update = (deltaTime) => {
 
 export const handlePlayerHit = () => {
   gameState.playerLives--;
+  sfx.damage.play();
   console.log(`Zbývající životy: ${gameState.playerLives}`);
   if (gameState.playerLives <= 0) showGameOver();
 };
@@ -130,6 +132,7 @@ canvas.addEventListener("click", (event) => {
 
     if (withinX && withinY) {
         gameStarted = true;
+        sfx.gameStart.play();
         gameLoop();
     }
 });
@@ -152,6 +155,7 @@ export const showGameOver = () => {
     if (gameOverDisplayed) return;
     frozenFrame = new Image();
     frozenFrame.src = canvas.toDataURL();
+    sfx.gameOver.play();
     console.log("Game Over!");
     gameOver = true;
     gameStarted = false

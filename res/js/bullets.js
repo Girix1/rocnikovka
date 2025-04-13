@@ -1,5 +1,6 @@
 import { player } from "./main.js";
 import { canvas, ctx } from "./main.js";
+import { sfx } from "./sound.js";
 
 export const bullets = [];
 const cannons = [{ offsetX: 0.2 }, { offsetX: 0.8 }];
@@ -23,6 +24,9 @@ document.addEventListener("keydown", (event) => {
       speed: canvas.height * 0.015,
     });
     setCanShoot(false);
+
+    sfx.shoot.currentTime = 0;
+    sfx.shoot.play();
   }
 });
 
