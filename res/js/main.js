@@ -1,7 +1,12 @@
 import "./bullets.js";
 import "./enemies.js";
 import { updateBullets, drawBullets } from "./bullets.js";
-import { drawEnemies, createEnemies, updateEnemies, waveLevel } from "./enemies.js";
+import {
+  drawEnemies,
+  createEnemies,
+  updateEnemies,
+  waveLevel,
+} from "./enemies.js";
 import { updateEnemyBullets, drawEnemyBullets } from "./enemyBullets.js";
 import { sfx } from "./sound.js";
 
@@ -13,7 +18,7 @@ createEnemies();
 
 export const gameState = {
   score: 0,
-  playerLives: 3
+  playerLives: 3,
 };
 
 export const increaseScore = (amount = 1) => {
@@ -52,13 +57,14 @@ window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
 
 document.addEventListener("keydown", (event) => {
-  if (event.key === "ArrowLeft" || event.key === "a") player.dx = -player.speed;
-  else if (event.key === "ArrowRight" || event.key === "d")
+  if (event.key === "ArrowLeft" || event.key === "a" || event.key === "A")
+    player.dx = -player.speed;
+  else if (event.key === "ArrowRight" || event.key === "d" || event.key === "D")
     player.dx = player.speed;
 });
 
 document.addEventListener("keyup", (event) => {
-  if (["ArrowLeft", "ArrowRight", "a", "d"].includes(event.key)) player.dx = 0;
+  if (["ArrowLeft", "ArrowRight", "a", "d", "A", "D"].includes(event.key)) player.dx = 0;
 });
 
 const update = (deltaTime) => {
@@ -76,7 +82,7 @@ export const handlePlayerHit = () => {
   console.log(`Zbývající životy: ${gameState.playerLives}`);
   if (gameState.playerLives <= 0) showGameOver();
 };
-//score 
+//score
 
 const drawScore = () => {
   ctx.fillStyle = "white";
@@ -89,54 +95,93 @@ const drawScore = () => {
   ctx.fillText(`Wave: ${waveLevel}`, canvas.width - 20, 30);
 };
 
-//startscreen 
+//startscreen
 let gameStarted = false;
 let gameOver = false;
+let startButtonRect = null;
+let instructionsButtonRect = null;
+let showingInstructions = false;
+
 
 const showStartScreen = () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "white";
-    ctx.font = "64px 'Press Start 2P', monospace";
-    ctx.textAlign = "center";
-    ctx.fillText("SPACE INVADERS!", canvas.width / 2, canvas.height / 2 - 100);
-    ctx.font = "32px 'Press Start 2P', monospace";
-    ctx.fillText("By Tomáš Novák", canvas.width / 2, canvas.height / 2 - 50);
+  document.getElementById("instructionsScreen").style.display = "none";
+  canvas.style.display = "block";
 
-    const buttonWidth = 300;
-    const buttonHeight = 80;
-    const buttonX = canvas.width / 2 - buttonWidth / 2;
-    const buttonY = canvas.height / 2;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "white";
+  ctx.font = "64px 'Press Start 2P', monospace";
+  ctx.textAlign = "center";
+  ctx.fillText("SPACE INVADERS!", canvas.width / 2, canvas.height / 2 - 100);
+  ctx.font = "32px 'Press Start 2P', monospace";
+  ctx.fillText("By Tomáš Novák", canvas.width / 2, canvas.height / 2 - 50);
 
-    ctx.fillStyle = "#ffa31a";
-    ctx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
+  const buttonWidth = 300;
+  const buttonHeight = 80;
+  const buttonX = canvas.width / 2 - buttonWidth / 2;
+  const buttonY = canvas.height / 2;
 
-    ctx.fillStyle = "black";
-    ctx.font = "32px 'Press Start 2P', monospace";
-    ctx.fillText("START", canvas.width / 2, buttonY + buttonHeight / 2 + 10);
+  ctx.fillStyle = "#ffa31a";
+  ctx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
+
+  ctx.fillStyle = "black";
+  ctx.font = "32px 'Press Start 2P', monospace";
+  ctx.fillText("START", canvas.width / 2, buttonY + buttonHeight / 2 + 10);
+
+  startButtonRect = {
+    x: buttonX,
+    y: buttonY,
+    w: buttonWidth,
+    h: buttonHeight
+  };
+  
+  const instrY = buttonY + 100;
+  ctx.fillStyle = "#ffa31a";
+  ctx.fillRect(buttonX, instrY, buttonWidth, buttonHeight);
+  ctx.fillStyle = "black";
+  ctx.font = "24px 'Press Start 2P', monospace";  
+  ctx.fillText("INSTRUCTIONS", canvas.width / 2, instrY + buttonHeight / 2 + 10);
+
+  instructionsButtonRect = {
+    x: buttonX,
+    y: instrY,
+    w: buttonWidth,
+    h: buttonHeight
+  };
+
+  const backToStart = () => {
+    showingInstructions = false;
+    document.getElementById("instructionsScreen").style.display = "none";
+    canvas.style.display = "flex";
+  };   
+  window.backToStart = backToStart;
+};
+
+const isMouseInRect = (mouseX, mouseY, rect) => {
+  return (
+    rect &&
+    mouseX >= rect.x &&
+    mouseX <= rect.x + rect.w &&
+    mouseY >= rect.y &&
+    mouseY <= rect.y + rect.h
+  );
 };
 
 canvas.addEventListener("click", (event) => {
-    if (gameStarted) return;
+  if (gameStarted) return;
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = event.clientX - rect.left;
+  const mouseY = event.clientY - rect.top;
 
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
-
-    const buttonWidth = 300;
-    const buttonHeight = 80;
-    const buttonX = canvas.width / 2 - buttonWidth / 2;
-    const buttonY = canvas.height / 2;
-
-    const withinX = mouseX >= buttonX && mouseX <= buttonX + buttonWidth;
-    const withinY = mouseY >= buttonY && mouseY <= buttonY + buttonHeight;
-
-    if (withinX && withinY) {
-        gameStarted = true;
-        sfx.gameStart.play();
-        gameLoop();
-    }
+  if (isMouseInRect(mouseX, mouseY, startButtonRect)) {
+    gameStarted = true;
+    sfx.gameStart.play();
+    gameLoop();
+  } else if (isMouseInRect(mouseX, mouseY, instructionsButtonRect)) {
+    showingInstructions = true;
+    canvas.style.display = "none";
+    document.getElementById("instructionsScreen").style.display = "flex";
+  }
 });
-
 //game over screen
 const gameOverScreen = document.getElementById("gameOverScreen");
 const finalScore = document.getElementById("finalScore");
@@ -152,32 +197,32 @@ let gameOverDisplayed = false;
 let frozenFrame = null;
 
 export const showGameOver = () => {
-    if (gameOverDisplayed) return;
-    frozenFrame = new Image();
-    frozenFrame.src = canvas.toDataURL();
-    sfx.gameOver.play();
-    console.log("Game Over!");
-    gameOver = true;
-    gameStarted = false
-    gameOverDisplayed = true;
-    finalScore.textContent = `Score: ${gameState.score}`;
-    waveNumber.textContent = `Wave: ${waveLevel}`;
-    saveHighScore(gameState.score);
-    updateHighScoresList();
-    gameOverScreen.style.display = "block";
+  if (gameOverDisplayed) return;
+  frozenFrame = new Image();
+  frozenFrame.src = canvas.toDataURL();
+  sfx.gameOver.play();
+  console.log("Game Over!");
+  gameOver = true;
+  gameStarted = false;
+  gameOverDisplayed = true;
+  finalScore.textContent = `Score: ${gameState.score}`;
+  waveNumber.textContent = `Wave: ${waveLevel}`;
+  saveHighScore(gameState.score);
+  updateHighScoresList();
+  gameOverScreen.style.display = "block";
 };
 
 const saveHighScore = (score) => {
-    let scores = JSON.parse(localStorage.getItem("highScores")) || [];
-    scores.push(score);
-    scores.sort((a, b) => b - a);
-    scores = scores.slice(0, 5);
-    localStorage.setItem("highScores", JSON.stringify(scores));
+  let scores = JSON.parse(localStorage.getItem("highScores")) || [];
+  scores.push(score);
+  scores.sort((a, b) => b - a);
+  scores = scores.slice(0, 5);
+  localStorage.setItem("highScores", JSON.stringify(scores));
 };
 
 const updateHighScoresList = () => {
-    const scores = JSON.parse(localStorage.getItem("highScores")) || [];
-    highScoresList.innerHTML = scores.map(s => `<li>${s}</li>`).join("");
+  const scores = JSON.parse(localStorage.getItem("highScores")) || [];
+  highScoresList.innerHTML = scores.map((s) => `<li>${s}</li>`).join("");
 };
 
 // universal speed hokus pokus diplodokus 🗣️ (uz to ztracim)
@@ -185,27 +230,27 @@ let lastTime = performance.now();
 
 let gameLoop = (currentTime = performance.now()) => {
   const deltaTime = (currentTime - lastTime) / 10;
-    lastTime = currentTime;
+  lastTime = currentTime;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (gameStarted && !gameOver) {
-      drawPlayer();
-      update(deltaTime);
-      updateBullets(deltaTime);
-      drawBullets();
-      updateEnemies(deltaTime);
-      drawEnemies();
-      updateEnemyBullets(deltaTime);
-      drawEnemyBullets();
-      drawScore();
-    } else if (gameOver && frozenFrame) {
-        ctx.drawImage(frozenFrame, 0, 0, canvas.width, canvas.height);
-  return;
-    } else {
-        showStartScreen();
-    }
-    requestAnimationFrame(gameLoop);
+  if (gameStarted && !gameOver) {
+    drawPlayer();
+    update(deltaTime);
+    updateBullets(deltaTime);
+    drawBullets();
+    updateEnemies(deltaTime);
+    drawEnemies();
+    updateEnemyBullets(deltaTime);
+    drawEnemyBullets();
+    drawScore();
+  } else if (gameOver && frozenFrame) {
+    ctx.drawImage(frozenFrame, 0, 0, canvas.width, canvas.height);
+    return;
+  } else if (!showingInstructions) {
+    showStartScreen();
+  }  
+  requestAnimationFrame(gameLoop);
 };
 
 gameLoop();
