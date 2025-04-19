@@ -1,76 +1,92 @@
 body {
-    background-color: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
 }
 
 canvas {
-    border: 2px solid grey;
+  border: 2px solid grey;
+}
+.menu-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  color: white;
+  font-family: 'Press Start 2P', monospace;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  text-align: center;
+}
+
+.menu-screen h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+.menu-screen h2 {
+  font-size: 20px;
+  margin-bottom: 40px;
 }
 
 #gameOverScreen {
-    position: absolute;
-    top: 20%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.8);
-    padding: 30px;
-    border-radius: 10px;
-    font-family: 'Press Start 2P', monospace;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  padding: 30px;
+  border-radius: 10px;
+  font-family: 'Press Start 2P', monospace;
+  text-align: center;
 }
 
 #instructionsScreen {
-    
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: black;
-    color: white;
-    font-family: 'Press Start 2P', monospace;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    z-index: 200;
-    text-align: center;
-    display: flex;
-  }
-  
-  #instructionsScreen button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-family: 'Press Start 2P', monospace;
-    font-size: 16px;
-    background-color: #ffa31a;
-    border: none;
-    cursor: pointer;
-  }
-  #restartButton {
-    font-family: 'Press Start 2P', monospace;
-    font-size: 18px;
-    background-color: #ffa31a;
-    color: black;
-    border: none;
-    padding: 20px 40px;
-    cursor: pointer;
-    border-radius: 10px;
-    box-shadow: 0 8px #cc8400;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    margin-top: 30px;
-  }
-  
-  #restartButton:hover {
-    background-color: #ffb347;
-    transform: translateY(-3px);
-    box-shadow: 0 12px #cc8400;
-  }
-  
-  #restartButton:active {
-    transform: translateY(2px);
-    box-shadow: 0 4px #cc8400;
-  }
-  
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  color: white;
+  font-family: 'Press Start 2P', monospace;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 200;
+  text-align: center;
+  display: flex;
+}
+
+.cool-button {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 18px;
+  background-color: #ffa31a;
+  color: black;
+  border: none;
+  padding: 20px 40px;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 0 8px #cc8400;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-top: 30px;
+}
+
+.cool-button:hover {
+  background-color: #ffb347;
+  transform: translateY(-3px);
+  box-shadow: 0 12px #cc8400;
+}
+
+.cool-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 4px #cc8400;
+}

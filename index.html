@@ -12,11 +12,17 @@
   </head>
   <body>
     <canvas id="gameCanvas"></canvas>
+    <div id="startMenu" class="menu-screen">
+      <h1>SPACE INVADERS!</h1>
+      <h2>By Tomáš Novák</h2>
+      <button id="startGameButton" class="cool-button">START</button>
+      <button id="instructionsButton" class="cool-button">INSTRUCTIONS</button>
+    </div>    
     <div id="instructionsScreen">
       <h1>Instructions</h1>
       <p>Use ← → or A/D to move</p>
       <p>Spacebar to shoot</p>
-      <button onclick="backToStart()">Back</button>
+      <button onclick="backToStart()" class="cool-button">Back</button>
     </div>    
     <div
       id="gameOverScreen"
@@ -25,7 +31,7 @@
       <h2>Game Over</h2>
       <p id="finalScore">Score: 0</p>
       <p id="waveNumber">Wave: 0</p>
-      <button id="restartButton">PLAY AGAIN</button>
+      <button id="restartButton" class="cool-button">PLAY AGAIN</button>
       <h3>High Scores</h3>
       <ol id="highScoresList"></ol>
     </div>

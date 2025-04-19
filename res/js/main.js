@@ -98,90 +98,43 @@ const drawScore = () => {
 //startscreen
 let gameStarted = false;
 let gameOver = false;
-let startButtonRect = null;
-let instructionsButtonRect = null;
 let showingInstructions = false;
 
+const startMenu = document.getElementById("startMenu");
+const instructionsScreen = document.getElementById("instructionsScreen");
+const startGameButton = document.getElementById("startGameButton");
+const instructionsButton = document.getElementById("instructionsButton");
 
 const showStartScreen = () => {
-  document.getElementById("instructionsScreen").style.display = "none";
+  instructionsScreen.style.display = "none";
+  canvas.style.display = "none";
+  startMenu.style.display = "flex";
+};
+
+startGameButton.addEventListener("click", () => {
+  sfx.button.play();
+  startMenu.style.display = "none";
   canvas.style.display = "block";
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "white";
-  ctx.font = "64px 'Press Start 2P', monospace";
-  ctx.textAlign = "center";
-  ctx.fillText("SPACE INVADERS!", canvas.width / 2, canvas.height / 2 - 100);
-  ctx.font = "32px 'Press Start 2P', monospace";
-  ctx.fillText("By Tomáš Novák", canvas.width / 2, canvas.height / 2 - 50);
-
-  const buttonWidth = 300;
-  const buttonHeight = 80;
-  const buttonX = canvas.width / 2 - buttonWidth / 2;
-  const buttonY = canvas.height / 2;
-
-  ctx.fillStyle = "#ffa31a";
-  ctx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
-
-  ctx.fillStyle = "black";
-  ctx.font = "32px 'Press Start 2P', monospace";
-  ctx.fillText("START", canvas.width / 2, buttonY + buttonHeight / 2 + 10);
-
-  startButtonRect = {
-    x: buttonX,
-    y: buttonY,
-    w: buttonWidth,
-    h: buttonHeight
-  };
-  
-  const instrY = buttonY + 100;
-  ctx.fillStyle = "#ffa31a";
-  ctx.fillRect(buttonX, instrY, buttonWidth, buttonHeight);
-  ctx.fillStyle = "black";
-  ctx.font = "24px 'Press Start 2P', monospace";  
-  ctx.fillText("INSTRUCTIONS", canvas.width / 2, instrY + buttonHeight / 2 + 10);
-
-  instructionsButtonRect = {
-    x: buttonX,
-    y: instrY,
-    w: buttonWidth,
-    h: buttonHeight
-  };
-
-  const backToStart = () => {
-    showingInstructions = false;
-    document.getElementById("instructionsScreen").style.display = "none";
-    canvas.style.display = "flex";
-  };   
-  window.backToStart = backToStart;
-};
-
-const isMouseInRect = (mouseX, mouseY, rect) => {
-  return (
-    rect &&
-    mouseX >= rect.x &&
-    mouseX <= rect.x + rect.w &&
-    mouseY >= rect.y &&
-    mouseY <= rect.y + rect.h
-  );
-};
-
-canvas.addEventListener("click", (event) => {
-  if (gameStarted) return;
-  const rect = canvas.getBoundingClientRect();
-  const mouseX = event.clientX - rect.left;
-  const mouseY = event.clientY - rect.top;
-
-  if (isMouseInRect(mouseX, mouseY, startButtonRect)) {
-    gameStarted = true;
-    sfx.gameStart.play();
-    gameLoop();
-  } else if (isMouseInRect(mouseX, mouseY, instructionsButtonRect)) {
-    showingInstructions = true;
-    canvas.style.display = "none";
-    document.getElementById("instructionsScreen").style.display = "flex";
-  }
+  sfx.gameStart.play();
+  gameStarted = true;
+  gameLoop();
 });
+
+instructionsButton.addEventListener("click", () => {
+  sfx.button.play();
+  startMenu.style.display = "none";
+  instructionsScreen.style.display = "flex";
+  showingInstructions = true;
+});
+
+const backToStart = () => {
+  sfx.button.play();
+  showingInstructions = false;
+  instructionsScreen.style.display = "none";
+  startMenu.style.display = "flex";
+};
+window.backToStart = backToStart;
+
 //game over screen
 const gameOverScreen = document.getElementById("gameOverScreen");
 const finalScore = document.getElementById("finalScore");
@@ -190,7 +143,10 @@ const restartButton = document.getElementById("restartButton");
 const highScoresList = document.getElementById("highScoresList");
 
 restartButton.addEventListener("click", () => {
-  location.reload();
+  sfx.button.play();
+  setTimeout(() => {
+    location.reload();
+  }, 300);
 });
 
 let gameOverDisplayed = false;

@@ -4,7 +4,8 @@ export const sfx = {
     gameOver: new Audio("res/sfx/game-over.wav"),
     pop: new Audio("res/sfx/pop.flac"),
     damage: new Audio("res/sfx/damage.wav"),
-    levelUp: new Audio("res/sfx/levelup.wav")
+    levelUp: new Audio("res/sfx/levelup.wav"),
+    button: new Audio("res/sfx/button.wav")
   };
   
   sfx.gameStart.volume = 0.6;
@@ -13,3 +14,4 @@ export const sfx = {
   sfx.pop.volume = 0.6;
   sfx.damage.volume = 0.6;
   sfx.levelUp.volume = 0.9;
+  sfx.button.volume = 0.9;
