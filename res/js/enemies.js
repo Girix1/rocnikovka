@@ -1,19 +1,11 @@
-import { canvas, ctx, increaseScore, showGameOver } from "./main.js";
+import { canvas, ctx, gameState, increaseScore, showGameOver } from "./main.js";
 import { bullets, setCanShoot } from "./bullets.js";
 import { sfx } from "./sound.js";
 
 export const enemies = [];
 export let waveLevel = 0;
 
-const pixelArtEnemies = [
-  "res/img/enemies/invader1.png",
-  "res/img/enemies/invader2.png",
-  "res/img/enemies/invader3.png",
-  "res/img/enemies/invader4.png",
-  "res/img/enemies/invader5.png"
-];
-
-const realisticEnemies = [
+const realEnemies = [
   "res/img/enemies/real1.png",
   "res/img/enemies/real2.png",
   "res/img/enemies/real3.png",
@@ -39,11 +31,7 @@ export const createEnemies = (
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
       const img = new Image();
-      if (waveLevel < 6) {
-        img.src = pixelArtEnemies[Math.floor(Math.random() * pixelArtEnemies.length)];
-      } else {
-        img.src = realisticEnemies[Math.floor(Math.random() * realisticEnemies.length)];
-      }
+      img.src = realEnemies[Math.floor(Math.random() * realEnemies.length)];
 
       enemies.push({
         x: startX + col * (enemyWidth + spacingX),
@@ -75,6 +63,7 @@ export const updateEnemies = (deltaTime) => {
     }
     enemies[i].x += enemies[i].speedX * enemies[i].direction * deltaTime;
 
+      // kulky dotknuti enemaku 
       for (let j = bullets.length - 1; j >= 0; j--) {
       if (
         bullets[j].x < enemies[i].x + enemies[i].width &&
@@ -91,19 +80,19 @@ export const updateEnemies = (deltaTime) => {
       }
     }
   }
-  
+
   for (let j = 0; j < enemies.length; j++) {
     if (enemies[j].y + enemies[j].height >= canvas.height - 100) {
       console.log("Game Over: enemies landed!");
       requestAnimationFrame(() => showGameOver());
     }
   }
-  
+
   if (enemies.length === 0) {
-    increaseScore(waveLevel);
+    gameState.playerLives++;
     sfx.levelUp.play();
     waveLevel++;
-    const newSpeed = 2 + waveLevel * 0.5;
+    const newSpeed = 1 + waveLevel * 0.5;
     createEnemies(3, 6, 20, 20, 60, 60, newSpeed);
   }
 }

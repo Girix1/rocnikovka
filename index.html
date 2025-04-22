@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Space Invaders</title>
+    <title>Galaxy Invaders</title>
+    <link rel="icon" type="image" href="./res/img/enemies/fabia.png">
     <link rel="stylesheet" href="res/css/style.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
@@ -13,7 +14,7 @@
   <body>
     <canvas id="gameCanvas"></canvas>
     <div id="startMenu" class="menu-screen">
-      <h1>SPACE INVADERS!</h1>
+      <h1>GALAXY INVADERS!</h1>
       <h2>By Tomáš Novák</h2>
       <button id="startGameButton" class="cool-button">START</button>
       <button id="instructionsButton" class="cool-button">INSTRUCTIONS</button>
@@ -22,13 +23,14 @@
       <h1>Instructions</h1>
       <p>Use ← → or A/D to move</p>
       <p>Spacebar to shoot</p>
+      <p>Each wave beaten adds one life</p>
       <button onclick="backToStart()" class="cool-button">Back</button>
     </div>    
     <div
       id="gameOverScreen"
       style="display: none; text-align: center; color: white"
     >
-      <h2>Game Over</h2>
+      <h2>Game Over!</h2>
       <p id="finalScore">Score: 0</p>
       <p id="waveNumber">Wave: 0</p>
       <button id="restartButton" class="cool-button">PLAY AGAIN</button>

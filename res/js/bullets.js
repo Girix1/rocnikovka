@@ -1,5 +1,4 @@
-import { player } from "./main.js";
-import { canvas, ctx } from "./main.js";
+import { player, canvas, ctx } from "./main.js";
 import { sfx } from "./sound.js";
 
 export const bullets = [];

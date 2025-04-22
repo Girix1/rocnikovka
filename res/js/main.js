@@ -1,27 +1,18 @@
 import "./bullets.js";
 import "./enemies.js";
 import { updateBullets, drawBullets } from "./bullets.js";
-import {
-  drawEnemies,
-  createEnemies,
-  updateEnemies,
-  waveLevel,
-} from "./enemies.js";
+import {drawEnemies, createEnemies, updateEnemies, waveLevel} from "./enemies.js";
 import { updateEnemyBullets, drawEnemyBullets } from "./enemyBullets.js";
 import { sfx } from "./sound.js";
 
 export const canvas = document.getElementById("gameCanvas");
 export const ctx = canvas.getContext("2d");
 export { player };
-
-createEnemies();
-
 export const gameState = {
   score: 0,
-  playerLives: 3,
+  playerLives: 2,
 };
-
-export const increaseScore = (amount = 1) => {
+export const increaseScore = (amount) => {
   gameState.score += amount;
 };
 
@@ -82,7 +73,7 @@ export const handlePlayerHit = () => {
   console.log(`Zbývající životy: ${gameState.playerLives}`);
   if (gameState.playerLives <= 0) showGameOver();
 };
-//score
+//vykresleni score, zivotu a wavelevelu
 
 const drawScore = () => {
   ctx.fillStyle = "white";
@@ -96,6 +87,7 @@ const drawScore = () => {
 };
 
 //startscreen
+
 let gameStarted = false;
 let gameOver = false;
 let showingInstructions = false;
@@ -168,6 +160,8 @@ export const showGameOver = () => {
   gameOverScreen.style.display = "block";
 };
 
+// ukladani score 
+
 const saveHighScore = (score) => {
   let scores = JSON.parse(localStorage.getItem("highScores")) || [];
   scores.push(score);
@@ -182,7 +176,10 @@ const updateHighScoresList = () => {
 };
 
 // universal speed hokus pokus diplodokus 🗣️ (uz to ztracim)
+
 let lastTime = performance.now();
+
+//volani funkci pro spravne spousteni hry atd
 
 let gameLoop = (currentTime = performance.now()) => {
   const deltaTime = (currentTime - lastTime) / 10;
@@ -210,3 +207,5 @@ let gameLoop = (currentTime = performance.now()) => {
 };
 
 gameLoop();
+
+//Ahoj Honzo :-)
